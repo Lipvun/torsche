@@ -44,19 +44,21 @@ class MotorQuery(object):
         self._query = self._query.skip(*args, **kwargs)
         return self
 
-    @gen.coroutine
     def fetch_next(self):
-        res = yield self._query.fetch_next
-        raise gen.Return(res)
+        return self._query.fetch_next
 
     def next_object(self):
         obj = self._query.next_object()
         return self._cls(obj)
+
+    @gen.coroutine
+    def save(self, document):
+        yield self._collection.insert(document)
 
     def find_one(self, *args, **kwargs):
         res = self.io_loop.run_sync(self._query.find_one(*args, **kwargs))
         return self._cls(res)
 
     def __iter__(self):
-        while self.io_loop.run_sync(self.fetch_next):
+        while (yield self.fetch_next()):
             yield self.next_object()

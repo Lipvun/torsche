@@ -3,6 +3,7 @@
 from . import Connection
 from .query import MotorQuery
 from schematics.models import Model as SchemaModel
+from tornado import gen
 
 
 class DBAccessor(object):
@@ -18,3 +19,8 @@ class DBAccessor(object):
 class Model(SchemaModel):
 
     objects = DBAccessor()
+
+    @gen.coroutine
+    def save(self):
+        res = yield self.objects.save(self.serialize())
+        raise gen.Return(res)
