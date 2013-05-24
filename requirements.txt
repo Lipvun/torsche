@@ -1,0 +1,12 @@
+
+# Tornado
+-e git://github.com/mauriciosl/tornado.git@origin/master#egg=tornado
+
+# Motor (Driver MongoDB para Tornado)
+pymongo==2.5
+greenlet==0.4.0
+-e git://github.com/mongodb/motor.git@origin/master#egg=motor
+
+# Schematics
+-e git://github.com/j2labs/schematics.git@origin/master#egg=schematics
+
